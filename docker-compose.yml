@@ -1,0 +1,24 @@
+version: '3.4'
+
+services:
+  mongodb:
+    image: mongo
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  webapi:
+    build: .
+    container_name: webapi
+    ports:
+      - "5000:80"
+    depends_on:
+      - mongodb
+    environment:
+      - MongoDbSettings__ConnectionString=mongo://mongo:27017
+      - MongoDbSettings__DatabaseName=ItemDb
+
+volumes:
+  mongo-data:
